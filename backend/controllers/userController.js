@@ -20,10 +20,8 @@ const authUser = asyncHandler(async (req, res) => {
 		});
 	} else {
 		res.status(401);
-		throw new Error("Invalid Efmail or Password");
+		throw new Error("Invalid Email or Password!");
 	}
-
-	res.send("auth user");
 });
 
 //@desc   Register user

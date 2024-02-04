@@ -46,11 +46,22 @@ const CartScreen = () => {
 												rounded
 											/>
 										</Col>
-										<Col md={3}>
+										<Col
+											md={3}
+											className="my-2"
+										>
 											<Link to={`/product/${item._id}`}>{item.name}</Link>
 										</Col>
-										<Col md={2}>Rs.{item.price}</Col>
-										<Col md={2}>
+										<Col
+											md={2}
+											className="my-2"
+										>
+											Rs.{item.price}
+										</Col>
+										<Col
+											md={2}
+											className="mb-2"
+										>
 											<Form.Control
 												as="select"
 												value={item.qty}
@@ -66,7 +77,11 @@ const CartScreen = () => {
 												))}
 											</Form.Control>
 										</Col>
-										<Col md={2}>
+
+										<Col
+											md={2}
+											className=""
+										>
 											<Button
 												type="button"
 												variant="light"
