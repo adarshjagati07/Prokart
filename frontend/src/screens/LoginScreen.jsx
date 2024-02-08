@@ -34,7 +34,7 @@ const LoginScreen = () => {
 		try {
 			const res = await auth({ email, password }).unwrap();
 			dispatch(setCredentials({ ...res }));
-			toast.success(`User Logged in.`);
+			toast.success(`User Logged in.`, { autoClose: 1000 });
 			navigate(redirect);
 		} catch (err) {
 			toast.error(err?.data?.message || err.error);
@@ -50,7 +50,7 @@ const LoginScreen = () => {
 				className="mt-4"
 			>
 				<Form.Group
-					className="my-2"
+					className="my-2 col-md-9"
 					controlId="email"
 				>
 					<Form.Label>Email Address</Form.Label>
@@ -63,7 +63,7 @@ const LoginScreen = () => {
 				</Form.Group>
 
 				<Form.Group
-					className="my-2"
+					className="my-2 col-md-9"
 					controlId="password"
 				>
 					<Form.Label>Password</Form.Label>

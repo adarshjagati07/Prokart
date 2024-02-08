@@ -23,7 +23,7 @@ const Header = () => {
 			await logoutApiCall().unwrap();
 			dispatch(logout());
 			navigate("/login");
-			toast.success("User Logged Out.");
+			toast.success("User Logged Out.", { autoClose: 1000 });
 		} catch (err) {
 			console.log(err);
 		}

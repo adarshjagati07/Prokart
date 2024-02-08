@@ -34,14 +34,14 @@ const RegisterScreen = () => {
 	const submitHandler = async (e) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
-			toast.error("Passwords do not match");
+			toast.error("Passwords do not match", { autoClose: 1000 });
 			return;
 		}
 
 		try {
 			const res = await register({ name, email, password }).unwrap();
 			dispatch(setCredentials({ ...res }));
-			toast.success(`User Logged in.`);
+			toast.success(`User Logged in.`, { autoClose: 1000 });
 			navigate(redirect);
 		} catch (err) {
 			toast.error(err?.data?.message || err.error);
@@ -57,7 +57,7 @@ const RegisterScreen = () => {
 				className="mt-4"
 			>
 				<Form.Group
-					className="my-2"
+					className="my-2 col-md-10"
 					controlId="name"
 				>
 					<Form.Label>Name:</Form.Label>
@@ -69,7 +69,7 @@ const RegisterScreen = () => {
 					></Form.Control>
 				</Form.Group>
 				<Form.Group
-					className="my-2"
+					className="my-2 col-md-10"
 					controlId="email"
 				>
 					<Form.Label>Email Address</Form.Label>
@@ -82,7 +82,7 @@ const RegisterScreen = () => {
 				</Form.Group>
 
 				<Form.Group
-					className="my-2"
+					className="my-2 col-md-10"
 					controlId="password"
 				>
 					<Form.Label>Password</Form.Label>
@@ -94,7 +94,7 @@ const RegisterScreen = () => {
 					></Form.Control>
 				</Form.Group>
 				<Form.Group
-					className="my-2"
+					className="my-2 col-md-10"
 					controlId="confirPassword"
 				>
 					<Form.Label>Confirm Password</Form.Label>
