@@ -30,10 +30,10 @@ const PlaceOrderScreen = () => {
 				orderItems: cart.cartItems,
 				shippingAddress: cart.shippingAddress,
 				paymentMethod: cart.paymentMethod,
-				itemsPrice: cart.itemsPrice,
-				shippingPrice: cart.shippingPrice,
-				taxPrice: cart.taxPrice,
-				totalPrice: cart.totalPrice
+				itemsPrice: (cart.itemsPrice / 83).toFixed(2),
+				shippingPrice: (cart.shippingPrice / 83).toFixed(2),
+				taxPrice: (cart.taxPrice / 83).toFixed(2),
+				totalPrice: (cart.totalPrice / 83).toFixed(2)
 			}).unwrap();
 			dispatch(clearCartItems());
 			navigate(`/order/${res._id}`);
@@ -75,7 +75,7 @@ const PlaceOrderScreen = () => {
 							{cart.cartItems.length === 0 ? (
 								<Message>Your cart is Empty!</Message>
 							) : (
-								<ListGroup variant="flush">
+								<ListGroup>
 									{cart.cartItems.map((item, index) => (
 										<ListGroup.Item key={index}>
 											<Row>
@@ -132,7 +132,7 @@ const PlaceOrderScreen = () => {
 								</Row>
 							</ListGroup.Item>
 
-							<ListGroup.Item>{error && <Message variant="danger">{error.data.message}</Message>}</ListGroup.Item>
+							{error && <Message variant="danger">{error.data.message}</Message>}
 
 							<ListGroup.Item>
 								<Button
