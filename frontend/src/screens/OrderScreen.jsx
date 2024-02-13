@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { useGetOrderDetailsQuery, usePayOrderMutation, useGetPayPalClientIdQuery } from "../slices/ordersApiSlice";
+import { useGetOrderDetailsQuery, usePayOrderMutation, useGetPayPalClientIdQuery, useDeliverOrderMutation } from "../slices/ordersApiSlice";
 import { ListGroup, Row, Col, Image, Button, Card } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
@@ -13,6 +13,8 @@ const OrderScreen = () => {
 	const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId);
 
 	const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+	const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
+
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
 	const { userInfo } = useSelector((state) => state.auth);
@@ -73,6 +75,16 @@ const OrderScreen = () => {
 				return orderId;
 			});
 	}
+
+	const deliverOrderHandler = async () => {
+		try {
+			await deliverOrder(orderId);
+			refetch();
+			toast.success("Order Delivered", { autoClose: 1000 });
+		} catch (err) {
+			toast.error(err?.data?.message || err.message);
+		}
+	};
 
 	return isLoading ? (
 		<Loader />
@@ -170,7 +182,7 @@ const OrderScreen = () => {
 								</Row>
 							</ListGroup.Item>
 
-							{!order.isPaid && (
+							{!order.isPaid && !userInfo.isAdmin && (
 								<ListGroup.Item>
 									{loadingPay && <Loader />}
 
@@ -193,6 +205,33 @@ const OrderScreen = () => {
 											</div>
 										</div>
 									)}
+								</ListGroup.Item>
+							)}
+
+							{!order.isPaid && userInfo.isAdmin && (
+								<ListGroup.Item>
+									<Button
+										type="button"
+										className="btn btn-block my-2"
+										onClick={deliverOrderHandler}
+										disabled
+									>
+										Mark as Delivered
+									</Button>
+									<Message>Payment is not done!</Message>
+								</ListGroup.Item>
+							)}
+
+							{loadingDeliver && <Loader />}
+							{userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+								<ListGroup.Item>
+									<Button
+										type="button"
+										className="btn btn-block"
+										onClick={deliverOrderHandler}
+									>
+										Mark as Delivered
+									</Button>
 								</ListGroup.Item>
 							)}
 						</ListGroup>
