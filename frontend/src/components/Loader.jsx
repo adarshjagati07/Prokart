@@ -1,13 +1,21 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
+import RiseLoader from "react-spinners/RiseLoader";
 
 const Loader = () => {
 	return (
-		<Spinner
-			animation="border"
-			role="status"
-			style={{ width: "100px", height: "100px", margin: "auto", display: "block" }}
-		></Spinner>
+		<div
+			style={{
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				height: "45vh"
+			}}
+		>
+			<RiseLoader
+				color="#7B8A8B"
+				size={20}
+			/>
+		</div>
 	);
 };
 
