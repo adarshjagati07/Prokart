@@ -22,4 +22,12 @@ const getProductById = asyncHandler(async (req, res) => {
 	}
 });
 
+//@desc Edit a Product
+//@route PUT/api/product/:id/edit
+//@access Private
+const editProduct = asyncHandler(async (req, res) => {
+	const product = await Product.findById(req.params.id);
+	console.log(product);
+});
+
 export { getProducts, getProductById };
