@@ -5,7 +5,7 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import FormContainer from "../../components/FormContainer";
 import { toast } from "react-toastify";
-import { useGetProductDetailsQuery, useUpdateProductMutation } from "../../slices/productsApiSlice";
+import { useGetProductDetailsQuery, useUpdateProductMutation, useUploadProductImageMutation } from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
 	const { id: productId } = useParams();
@@ -22,6 +22,8 @@ const ProductEditScreen = () => {
 	const { data: product, isLoading, refetch, error } = useGetProductDetailsQuery(productId);
 
 	const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
+
+	const [uploadProductImage, { isLoading: loadingUpload }] = useUploadProductImageMutation();
 
 	useEffect(() => {
 		if (product) {
@@ -54,6 +56,18 @@ const ProductEditScreen = () => {
 		} else {
 			toast.success("Product Updated", { autoClose: 1000 });
 			navigate("/admin/productlist");
+		}
+	};
+
+	const uploadFileHandler = async (e) => {
+		const formData = new FormData();
+		formData.append("image", e.target.files[0]);
+		try {
+			const res = await uploadProductImage(formData).unwrap();
+			toast.success(res.message, { autoClose: 1000 });
+			setImage(res.image);
+		} catch (err) {
+			toast.error(err?.data?.message || err.error);
 		}
 	};
 
@@ -112,6 +126,24 @@ const ProductEditScreen = () => {
 								placeholder="Enter Category"
 								value={category}
 								onChange={(e) => setCategory(e.target.value)}
+							></Form.Control>
+						</Form.Group>
+
+						<Form.Group
+							controlId="image"
+							className="my-1"
+						>
+							<Form.Label>Image: </Form.Label>
+							<Form.Control
+								type="text"
+								placeholder="Enter Image URL"
+								value={image}
+								onChange={(e) => setImage}
+							></Form.Control>
+							<Form.Control
+								type="file"
+								label="Choose file"
+								onChange={uploadFileHandler}
 							></Form.Control>
 						</Form.Group>
 
