@@ -39,7 +39,6 @@ const ProductEditScreen = () => {
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
-		console.log(productId);
 		const updatedProduct = {
 			productId,
 			name,
@@ -56,6 +55,7 @@ const ProductEditScreen = () => {
 		} else {
 			toast.success("Product Updated", { autoClose: 1000 });
 			navigate("/admin/productlist");
+			refetch();
 		}
 	};
 
@@ -80,9 +80,10 @@ const ProductEditScreen = () => {
 				Go Back
 			</Link>
 			<FormContainer>
-				<h1>Edit Container</h1>
+				<h1>Edit Product</h1>
 
 				{loadingUpdate && <Loader />}
+				{loadingUpload && <Loader />}
 
 				{isLoading ? (
 					<Loader />

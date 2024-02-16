@@ -8,15 +8,13 @@ import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
 
 const OrderListScreen = () => {
 	const { data: orders, isLoading, error } = useGetOrdersQuery();
-	console.log(orders);
-
 	return (
 		<div>
 			<h2>Orders List</h2>
 			{isLoading ? (
 				<Loader />
 			) : error ? (
-				<Message variant="danger">{error}</Message>
+				<Message variant="danger">{error?.data?.message}</Message>
 			) : (
 				<Table
 					striped
