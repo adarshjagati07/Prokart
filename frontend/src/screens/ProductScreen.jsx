@@ -142,7 +142,7 @@ const ProductScreen = () => {
 							</Card>
 						</Col>
 					</Row>
-					<Row className="review">
+					<Row className="review my-2 ">
 						<h2>Reviews</h2>
 						{product.reviews.length === 0 && <Message> No Reviews </Message>}
 						<Row variant="flush">
@@ -198,7 +198,7 @@ const ProductScreen = () => {
 							</Col>
 							<Col
 								md={6}
-								style={{ marginLeft: "3rem", paddingLeft: "1rem", paddingTop: "1rem", border: "dashed grey 1px" }}
+								style={{ marginLeft: "12px", paddingLeft: "1rem", paddingTop: "1rem", border: "dashed grey 1px" }}
 							>
 								{product.reviews.map((review) => (
 									<ListGroup.Item key={review.id}>
