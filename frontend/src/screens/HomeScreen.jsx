@@ -14,7 +14,9 @@ const HomeScreen = () => {
 
 	return (
 		<>
-			{keyword && (
+			{!keyword ? (
+				<ProductCarousel />
+			) : (
 				<Link
 					to="/"
 					className="btn btn-light my-3"
@@ -22,7 +24,7 @@ const HomeScreen = () => {
 					Go Back
 				</Link>
 			)}
-			<ProductCarousel />
+
 			{isLoading ? (
 				<Loader />
 			) : error ? (
