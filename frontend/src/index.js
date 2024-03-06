@@ -109,7 +109,7 @@ const router = createBrowserRouter(
 					element={<ProductListScreen />}
 				/>
 				<Route
-					path="/admin/productlist/page/:pageNumber"
+					path="/admin/productlist/:pageNumber"
 					element={<ProductListScreen />}
 				/>
 				<Route
