@@ -8,7 +8,8 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 				url: ORDERS_URL,
 				method: "POST",
 				body: { ...order }
-			})
+			}),
+			invalidatesTags: ["Order"]
 		}),
 		getOrderDetails: builder.query({
 			query: (id) => ({
@@ -33,21 +34,39 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 			query: () => ({
 				url: `${ORDERS_URL}/myorders`
 			}),
-			keepUnusedDataFor: 5
+			keepUnusedDataFor: 5,
+			providesTags: ["Order"]
 		}),
 		getOrders: builder.query({
 			query: () => ({
 				url: ORDERS_URL
 			}),
-			keepUnusedDataFor: 5
+			keepUnusedDataFor: 5,
+			providesTags: ["Orders"]
 		}),
 		deliverOrder: builder.mutation({
 			query: (orderId) => ({
 				url: `${ORDERS_URL}/${orderId}/deliver`,
 				method: "PUT"
 			})
+		}),
+		deleteOrder: builder.mutation({
+			query: (orderId) => ({
+				url: `${ORDERS_URL}/${orderId}`,
+				method: "DELETE"
+			}),
+			invalidatesTags: ["Order"]
 		})
 	})
 });
 
-export const { useCreateOrderMutation, useGetOrderDetailsQuery, useGetPayPalClientIdQuery, usePayOrderMutation, useGetMyOrdersQuery, useGetOrdersQuery, useDeliverOrderMutation } = ordersApiSlice;
+export const {
+	useCreateOrderMutation,
+	useGetOrderDetailsQuery,
+	useGetPayPalClientIdQuery,
+	usePayOrderMutation,
+	useGetMyOrdersQuery,
+	useGetOrdersQuery,
+	useDeliverOrderMutation,
+	useDeleteOrderMutation
+} = ordersApiSlice;

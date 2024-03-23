@@ -2,18 +2,25 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { useGetOrderDetailsQuery, usePayOrderMutation, useGetPayPalClientIdQuery, useDeliverOrderMutation } from "../slices/ordersApiSlice";
+import { useGetOrderDetailsQuery, usePayOrderMutation, useGetPayPalClientIdQuery, useDeliverOrderMutation, useDeleteOrderMutation } from "../slices/ordersApiSlice";
 import { ListGroup, Row, Col, Image, Button, Card } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const OrderScreen = () => {
 	const { id: orderId } = useParams();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId);
 
 	const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 	const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
+
+	const [deleteOrder, { isLoading: createDeleteLoader }] = useDeleteOrderMutation();
 
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -52,11 +59,6 @@ const OrderScreen = () => {
 			}
 		});
 	}
-	async function onApproveTest() {
-		await payOrder({ orderId, details: { payer: {} } });
-		refetch();
-		toast.success("Payment successful", { autoClose: 1000 });
-	}
 	function onError(err) {
 		toast.error(err?.data?.message || err.message);
 	}
@@ -83,6 +85,20 @@ const OrderScreen = () => {
 			toast.success("Order Delivered", { autoClose: 1000 });
 		} catch (err) {
 			toast.error(err?.data?.message || err.message);
+		}
+	};
+
+	const cancelOrderHandler = async (id) => {
+		if (window.confirm("Are you sure you want to Cancel the Order?")) {
+			try {
+				await deleteOrder(id);
+				refetch();
+				navigate("/profile");
+				refetch();
+				toast.success("Order Cancelled", { autoClose: 800 });
+			} catch (err) {
+				toast.error(err?.data?.message || err.error);
+			}
 		}
 	};
 
@@ -190,12 +206,6 @@ const OrderScreen = () => {
 										<Loader />
 									) : (
 										<div>
-											<Button
-												onClick={onApproveTest}
-												style={{ marginBottom: "10px" }}
-											>
-												Test Pay Order
-											</Button>
 											<div>
 												<PayPalButtons
 													createOrder={createOrder}
@@ -219,6 +229,19 @@ const OrderScreen = () => {
 										Mark as Delivered
 									</Button>
 									<Message>Payment is not done!</Message>
+								</ListGroup.Item>
+							)}
+
+							{createDeleteLoader && <Loader />}
+							{order.isPaid && !order.isDelivered && (
+								<ListGroup.Item>
+									<Button
+										type="button"
+										className="btn btn-block my-2"
+										onClick={() => cancelOrderHandler(order._id)}
+									>
+										Cancel Order
+									</Button>
 								</ListGroup.Item>
 							)}
 
